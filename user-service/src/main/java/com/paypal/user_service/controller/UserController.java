@@ -17,20 +17,31 @@ public class UserController {
     public UserController(UserService userService){
       this.userService=userService;
     }
-
+    
     @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        System.out.println("Received user: " + user); // This will print
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    /*@PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user){
+    	System.out.println("Received user: " + user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> getUserById(@PathVariable Long id){
-        return userService.getUserById(id).map(us->ResponseEntity.ok(new ApiResponse<>("",us)))
-                .orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).body( new ApiResponse<>("User not found with ID: "+id,null)));
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<UserResponseDTO>> getallUsers(){
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
+	
+	 * @GetMapping("/{id}") public ResponseEntity<ApiResponse<UserResponseDTO>>
+	 * getUserById(@PathVariable Long id){ return
+	 * userService.getUserById(id).map(us->ResponseEntity.ok(new
+	 * ApiResponse<>("",us)))
+	 * .orElseGet(()->ResponseEntity.status(HttpStatus.NOT_FOUND).body( new
+	 * ApiResponse<>("User not found with ID: "+id,null))); }
+	 * 
+	 * @GetMapping("/all") public ResponseEntity<List<UserResponseDTO>>
+	 * getallUsers(){ return ResponseEntity.ok(userService.getAllUsers()); }
+	 * 
+	 * @GetMapping("/test") public String test() {
+	 * System.out.println("TEST endpoint hit!"); return "test OK"; }
+	 */
 }
