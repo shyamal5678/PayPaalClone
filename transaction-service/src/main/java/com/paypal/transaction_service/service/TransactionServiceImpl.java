@@ -2,6 +2,8 @@ package com.paypal.transaction_service.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.paypal.transaction_service.kafka.KafkaEventProducer;
 import org.slf4j.*;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ public class TransactionServiceImpl implements TransactionService{
 	private final Logger LOGGER= LoggerFactory.getLogger(TransactionServiceImpl.class);
 	private final TransactionRepository transactionRepository;
 	private final ObjectMapper objectMapper;
+    private final KafkaEventProducer kafkaEventProducer;
 	
-	public TransactionServiceImpl(TransactionRepository transactionRepository,ObjectMapper objectMapper) {
+	public TransactionServiceImpl(TransactionRepository transactionRepository,ObjectMapper objectMapper,KafkaEventProducer kafkaEventProducer) {
 		this.objectMapper=objectMapper;
 		this.transactionRepository=transactionRepository;
+        this.kafkaEventProducer=kafkaEventProducer;
 	}
 
 	@Override
@@ -39,6 +43,14 @@ public class TransactionServiceImpl implements TransactionService{
 
         Transaction saved = transactionRepository.save(transactionObj);
         LOGGER.info("💾 Saved Transaction from DB: " + saved);
+        try{
+        String eventPayload=objectMapper.writeValueAsString(saved);
+        String key= String.valueOf(saved.getId());
+        kafkaEventProducer.sendTransactionEvent(key,saved);
+        LOGGER.info("Kafka message sent",saved.getId());
+        } catch (Exception e) {
+            LOGGER.error("Kafka message failed",e);
+        }
 		return saved;
 	}
 

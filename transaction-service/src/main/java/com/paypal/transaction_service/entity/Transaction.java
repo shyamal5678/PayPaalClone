@@ -17,7 +17,7 @@ public class Transaction {
 	private Long receiverId;
 	@Column(nullable = false)
 	@Positive(message = "Amount must be positive")
-	private double amount;
+	private Double amount;
 	@Column(nullable = false)
 	private LocalDateTime timestamp;
 	@Column(nullable = false)
@@ -26,7 +26,7 @@ public class Transaction {
 	public Transaction() {}
 	
 	public Transaction(Long id, Long senderId, Long receiverId,
-			@Positive(message = "Amount must be positive") double amount, LocalDateTime timestamp, String status) {
+			@Positive(message = "Amount must be positive") Double amount, LocalDateTime timestamp, String status) {
 		super();
 		this.id = id;
 		this.senderId = senderId;
@@ -70,7 +70,7 @@ public class Transaction {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
