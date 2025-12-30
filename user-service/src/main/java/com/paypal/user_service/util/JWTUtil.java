@@ -3,6 +3,7 @@ package com.paypal.user_service.util;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -12,7 +13,8 @@ import java.util.Map;
 
 @Component
 public class JWTUtil {
-    private static final String SECRET="secret123secret123";
+    @Value("${jwt.secret}")
+    private static String SECRET;
 
     //key to signedKey in bytes conversion
     public Key getSignedKey(){
