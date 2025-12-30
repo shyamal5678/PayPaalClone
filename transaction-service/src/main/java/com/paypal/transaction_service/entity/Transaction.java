@@ -66,7 +66,7 @@ public class Transaction {
 		this.receiverId = receiverId;
 	}
 
-	public double getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
